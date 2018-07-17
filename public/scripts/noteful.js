@@ -400,7 +400,7 @@ const noteful = (function () {
           store.authorized = true;
           loginForm[0].reset();
 
-          store.currentUser = response;
+          store.authToken = response.authToken;
 
           return Promise.all([
             api.search('/api/notes'),
