@@ -9,21 +9,24 @@ const User = require('../models/user');
 
 /* ========== POST new user ========== */
 router.post('/', (req, res, next) => {
-  const fullname = req.body.fullname;
+  let fullname = req.body.fullname;
   const password = req.body.password;
   const username = req.body.username;
+  if(fullname === null){
+    fullname = '';
+  }
 
   //checks that username exists (not empty string or null)
   if(!username){
     const err = new Error('Username field is required');
-    err.status = 400;
+    err.status = 422;
     return next(err);
   }
 
   //checks that password exists (not empty string or null)
   if(!password){
     const err = new Error('Password field is required');
-    err.status = 400;
+    err.status = 422;
     return next(err);
   }
 
@@ -33,7 +36,7 @@ router.post('/', (req, res, next) => {
   
   if(notString){
     const err = new Error(`Expect ${notString} to be of data type 'string'`);
-    err.status = 400;
+    err.status = 422;
     return next(err);
   }
 
@@ -44,7 +47,7 @@ router.post('/', (req, res, next) => {
 
   if(notTrimmedField){
     const err = new Error(`Should not be whitespace at beginning or end of ${notTrimmedField}`);
-    err.status = 400;
+    err.status = 422;
     return next(err);
   }
 
@@ -53,14 +56,14 @@ router.post('/', (req, res, next) => {
   //checks that username is at least 1 character
   if(username.length < 1) {
     const err = new Error('username must be at least 1 character');
-    err.status = 400;
+    err.status = 422;
     return next(err);
   }
 
   //checks that password is between 8 and 72 characters (inclusively)
   if(password.length < 8 || password.length > 72) {
     const err = new Error('password must be at least 8 characters and no more than 72 characters in length');
-    err.status = 400;
+    err.status = 422;
     return next(err);
   }
 
