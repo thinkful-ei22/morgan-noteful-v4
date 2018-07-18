@@ -10,6 +10,7 @@ const options = {
 };
 
 const jwtStrategy = new JwtStrategy(options, (payload, done) => {
+  //could validate user using database call using payload.user
   done(null, payload.user);
 });
 

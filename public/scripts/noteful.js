@@ -177,6 +177,9 @@ const noteful = (function () {
         folderId: editForm.find('.js-note-folder-entry').val(),
         tags: editForm.find('.js-note-tags-entry').val()
       };
+      if(noteObj.folderId === '') {
+        delete noteObj.folderId;
+      }
 
       if (store.currentNote.id) {
         api.update(`/api/notes/${noteObj.id}`, noteObj)
