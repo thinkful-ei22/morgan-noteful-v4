@@ -31,6 +31,8 @@ describe('Noteful API - Tags', function () {
     this.timeout(5000);
     return Promise.all([
       User.insertMany(seedUsers),
+      User.createIndexes(),
+
       Tag.insertMany(seedTags),
       Tag.createIndexes()
     ])

@@ -31,6 +31,8 @@ describe('Noteful API - Folders', function () {
     this.timeout(6000);
     return Promise.all([
       User.insertMany(seedUsers),
+      User.createIndexes(),
+
       Folder.insertMany(seedFolders),
       Folder.createIndexes()
     ])
