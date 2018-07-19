@@ -18,7 +18,7 @@ const JWT_SECRET = process.env.JWT_SECRET;
 chai.use(chaiHttp);
 const expect = chai.expect;
 
-describe.only('Noteful API - Folders', function () {
+describe('Noteful API - Folders', function () {
   let token;
   let user;
 
