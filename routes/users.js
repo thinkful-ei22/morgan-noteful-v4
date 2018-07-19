@@ -9,7 +9,7 @@ const User = require('../models/user');
 
 /* ========== POST new user ========== */
 router.post('/', (req, res, next) => {
-  let fullname = req.body.fullname;
+  let fullname = req.body.fullname.trim();
   const password = req.body.password;
   const username = req.body.username;
   if(fullname === null){
