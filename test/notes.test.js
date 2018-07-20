@@ -252,7 +252,9 @@ describe('Noteful API - Notes', function () {
     it('should create and return a new item when provided valid data', function () {
       const newItem = {
         title: 'The best article about cats ever!',
-        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...'
+        content: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor...',
+        tags: [],
+        folderId: ''
       };
       let res;
       return chai.request(app)
@@ -285,6 +287,7 @@ describe('Noteful API - Notes', function () {
       return chai.request(app)
         .post('/api/notes')
         .send(newItem)
+        .set('Authorization', `Bearer ${token}`)
         .then(res => {
           expect(res).to.have.status(400);
           expect(res).to.be.json;
@@ -339,7 +342,9 @@ describe('Noteful API - Notes', function () {
     it('should update the note when provided valid data', function () {
       const updateItem = {
         title: 'What about dogs?!',
-        content: 'Lorem ipsum dolor sit amet, sed do eiusmod tempor...'
+        content: 'Lorem ipsum dolor sit amet, sed do eiusmod tempor...',
+        folderId: '',
+        tags: []
       };
       let data;
       return Note.findOne({'userId': user.id})

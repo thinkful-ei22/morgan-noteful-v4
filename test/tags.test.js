@@ -23,30 +23,38 @@ describe('Noteful API - Tags', function () {
   let token;
 
   before(function () {
+    this.timeout(30000);
     return mongoose.connect(TEST_MONGODB_URI)
       .then(() => mongoose.connection.db.dropDatabase());
   });
 
   beforeEach(function () {
-    this.timeout(5000);
+    this.timeout(30000);
     return Promise.all([
       User.insertMany(seedUsers),
-      User.createIndexes(),
-
-      Tag.insertMany(seedTags),
-      Tag.createIndexes()
+      Tag.insertMany(seedTags)
     ])
-      .then(function([userRes, tagRes, indexRes]){
+      .then( function([userRes, tagRes]) {
+        return [userRes, 
+          Promise.all([
+            User.createIndexes(), 
+            Tag.createIndexes()
+          ])
+        ];
+      })
+      .then(function([userRes, indexRes]){
         user = userRes[0];
         token = jwt.sign({user}, JWT_SECRET, {subject: user.username});
       });
   });
 
   afterEach(function () {
+    this.timeout(30000);
     return mongoose.connection.db.dropDatabase();
   });
 
   after(function () {
+    this.timeout(30000);
     return mongoose.disconnect();
   });
 

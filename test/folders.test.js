@@ -23,31 +23,39 @@ describe('Noteful API - Folders', function () {
   let user;
 
   before(function () {
+    this.timeout(30000);
     return mongoose.connect(TEST_MONGODB_URI)
       .then(() => mongoose.connection.db.dropDatabase());
   });
 
   beforeEach(function () {
-    this.timeout(6000);
+    this.timeout(30000);
     return Promise.all([
       User.insertMany(seedUsers),
-      User.createIndexes(),
 
       Folder.insertMany(seedFolders),
-      Folder.createIndexes()
     ])
-      .then(function([userRes, folderRes, indexRes]){
+      .then( function([userRes, folderRes]) {
+        return [userRes, 
+          Promise.all([
+            User.createIndexes(), 
+            Folder.createIndexes(), 
+          ])
+        ];
+      })
+      .then(function([userRes, indexRes]){
         user = userRes[0];
         token = jwt.sign({user}, JWT_SECRET, {subject: user.username});
       });
   });
 
   afterEach(function () {
-    this.timeout(6000);
+    this.timeout(30000);
     return mongoose.connection.db.dropDatabase();
   });
 
   after(function () {
+    this.timeout(30000);
     return mongoose.disconnect();
   });
 
@@ -135,7 +143,6 @@ describe('Noteful API - Folders', function () {
         .get('/api/folders/DOESNOTEXIST')
         .set('Authorization', `Bearer ${token}`)
         .then(res => {
-          console.log('RESULT FROM API:', res.id);
           expect(res).to.have.status(404);
           expect(res.body.message).to.equal('Not Found');
         });
